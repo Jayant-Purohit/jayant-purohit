@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Jayant Purohit</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, system-ui, sans-serif;
+      background: #000;
+      color: white;
+    }
+
+    .hero {
+      height: 100vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 10vw, 120px);
+      margin: 0;
+      letter-spacing: -1px;
+    }
+
+    .hero p {
+      color: rgba(255,255,255,0.7);
+    }
+
+    .scroll-wrapper {
+      position: relative;
+    }
+
+    .sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      font-size: clamp(18px, 4vw, 28px);
+      line-height: 2;
+    }
+
+    .word {
+      display: inline-block;
+      margin-right: 4px;
+      color: rgba(255,255,255,var(--alpha,0.05));
+      filter: blur(var(--blur, 12px));
+      transform: translateY(var(--y, 12px));
+      opacity: var(--opacity, 0.2);
+      transition: all 0.25s ease-out;
+      will-change: transform, filter, opacity;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero">
+    <div>
+      <h1>Jayant Purohit</h1>
+      <p>Crafting high-performance experiences that scale across platforms.</p>
+    </div>
+  </section>
+
+  <section class="scroll-wrapper" id="wrapper">
+    <div class="sticky">
+      <p class="container" id="text"></p>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      const TEXT = `Frontend Engineer with 7+ years of experience building scalable, high-performance applications across Web, iOS, and Smart TV platforms. Currently at BookMyShow, working with the Lead Generation & AdTech team to build products from scratch, focusing on scalable architecture, performance, and reliability. Previously worked with Retention & Loyalty teams, building user engagement and lifecycle-driven products. Strong expertise in React.js, Vue.js, UI architecture, and cross-platform development, with deep experience in integrating third-party libraries, analytics, and marketing tools.`;
+
+      const container = document.getElementById('text');
+      const wrapper = document.getElementById('wrapper');
+
+      const words = TEXT.split(' ');
+      const spans = [];
+
+      words.forEach(word => {
+        const span = document.createElement('span');
+        span.className = 'word';
+        span.textContent = word + ' ';
+        spans.push(span);
+        container.appendChild(span);
+      });
+
+      let totalScroll = 1;
+
+      function computeMetrics() {
+        const pxPerWord = 24;
+        totalScroll = spans.length * pxPerWord;
+        wrapper.style.height = totalScroll + window.innerHeight + 'px';
+      }
+
+      function render(progress) {
+        const n = spans.length;
+
+        // ease-in bias
+        const biased = Math.pow(progress, 1.6);
+        const x = biased * n;
+
+        spans.forEach((span, i) => {
+          const d = x - i;
+          const clamped = Math.min(Math.max(d, 0), 1);
+          const e = Math.pow(clamped, 2.2);
+
+          span.style.setProperty('--alpha', (0.05 + 0.95 * e).toFixed(3));
+          span.style.setProperty('--blur', `${(1 - e) * 12}px`);
+          span.style.setProperty('--y', `${(1 - e) * 14}px`);
+          span.style.setProperty('--opacity', (0.2 + 0.8 * e).toFixed(3));
+        });
+      }
+
+      let ticking = false;
+
+      function update() {
+        const rect = wrapper.getBoundingClientRect();
+
+        const start = window.innerHeight;
+        const end = -wrapper.offsetHeight + window.innerHeight;
+
+        let progress = (start - rect.top) / (start - end);
+        progress = Math.min(Math.max(progress, 0), 1);
+
+        render(progress);
+        ticking = false;
+      }
+
+      function onScroll() {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      }
+
+      function init() {
+        computeMetrics();
+        update();
+      }
+
+      window.addEventListener('load', init);
+      window.addEventListener('resize', init);
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+  </script>
+</body>
+</html>
