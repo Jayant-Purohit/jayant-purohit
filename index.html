@@ -2,52 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jayant Purohit</title>
 
   <style>
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, system-ui, sans-serif;
+      font-family: system-ui, sans-serif;
       background: #000;
-      color: white;
+      color: #fff;
     }
 
-    .hero {
+    header {
       height: 100vh;
-      display: grid;
-      place-items: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
       text-align: center;
     }
 
-    .hero h1 {
-      font-size: clamp(42px, 10vw, 120px);
+    h1 {
+      font-size: clamp(40px, 10vw, 100px);
       margin: 0;
-      letter-spacing: -1px;
-    }
-
-    .hero p {
-      color: rgba(255,255,255,0.7);
     }
 
     .scroll-hint {
-      position: absolute;
-      bottom: 30px;
+      position: fixed;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       font-size: 12px;
-      letter-spacing: 1px;
-      color: rgba(255,255,255,0.5);
-      animation: fadeMove 2s infinite;
+      opacity: 0.7;
     }
 
-    @keyframes fadeMove {
-      0% { opacity: 0; transform: translate(-50%, 10px); }
-      50% { opacity: 1; transform: translate(-50%, 0px); }
-      100% { opacity: 0; transform: translate(-50%, -10px); }
-    }
-
-    .scroll-wrapper {
+    .wrapper {
       position: relative;
     }
 
@@ -61,158 +50,96 @@
       padding: 20px;
     }
 
-    .container {
+    .text {
       max-width: 700px;
-      font-size: clamp(18px, 4vw, 28px);
-      line-height: 2;
+      font-size: 22px;
+      line-height: 1.8;
     }
 
     .word {
-      display: inline-block;
-      margin-right: 4px;
-      color: rgba(255,255,255,var(--alpha,0.05));
-      filter: blur(var(--blur, 12px));
-      transform: translateY(var(--y, 12px));
-      opacity: var(--opacity, 0.2);
-      transition: all 0.25s ease-out;
-      will-change: transform, filter, opacity;
+      opacity: 0.2;
+      transition: opacity 0.2s;
     }
 
-    /* Scroll Indicator */
-    .scroll-indicator {
+    .progress {
       position: fixed;
       bottom: 0;
       left: 0;
-      width: 100%;
       height: 4px;
-      background: rgba(255,255,255,0.1);
-      z-index: 10;
+      background: #fff;
+      width: 0%;
     }
 
-    .scroll-progress {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #fff, #aaa);
-      transition: width 0.1s linear;
-    }
+    a { color: #fff; text-decoration: none; }
   </style>
 </head>
 
 <body>
-  <section class="hero">
-    <div>
-      <h1>Jayant Purohit</h1>
-      <p>Crafting high-performance experiences that scale across platforms.</p>
-      <div class="scroll-hint">scroll to continue ↓</div>
-    </div>
-  </section>
 
-  <section class="scroll-wrapper" id="wrapper">
+<header>
+  <h1>Jayant Purohit</h1>
+</header>
+
+<div class="scroll-hint" id="hint">scroll to continue ↓</div>
+
+<main>
+  <section class="wrapper" id="wrapper">
     <div class="sticky">
-      <p class="container" id="text"></p>
+      <p class="text" id="text"></p>
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section style="padding: 60px 20px; text-align: center;">
-    <h2 style="font-size: 28px; margin-bottom: 20px;">Get in touch</h2>
-    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 16px; color: rgba(255,255,255,0.8);">
-      <a href="https://www.linkedin.com/in/jayant-purohit-715b0976" target="_blank" style="color: white; text-decoration: none;">LinkedIn</a>
-      <a href="mailto:dowebwithjay@gmail.com" style="color: white; text-decoration: none;">dowebwithjay@gmail.com</a>
-      <a href="tel:+919784483688" style="color: white; text-decoration: none;">+91-9784483688</a>
-    </div>
+  <section style="padding:50px;text-align:center;">
+    <p><a href="https://www.linkedin.com/in/jayant-purohit-715b0976" target="_blank">LinkedIn</a></p>
+    <p><a href="mailto:dowebwithjay@gmail.com">dowebwithjay@gmail.com</a></p>
+    <p><a href="tel:+919784483688">+91-9784483688</a></p>
   </section>
+</main>
 
-  <!-- Scroll Indicator -->
-  <div class="scroll-indicator">
-    <div class="scroll-progress" id="progressBar"></div>
-  </div>
+<div class="progress" id="progress"></div>
 
-  <script>
-    (function () {
-      const TEXT = `Frontend Engineer with 7+ years of experience building scalable, high-performance applications across Web, iOS, and Smart TV platforms. Currently at BookMyShow, working with the Lead Generation & AdTech team to build products from scratch, focusing on scalable architecture, performance, and reliability. Previously worked with Retention & Loyalty teams, building user engagement and lifecycle-driven products. Strong expertise in React.js, Vue.js, UI architecture, and cross-platform development, with deep experience in integrating third-party libraries, analytics, and marketing tools.`;
+<script>
+const TEXT = `Frontend Engineer with 7+ years of experience building scalable, high-performance applications across Web, iOS, and Smart TV platforms. Currently at BookMyShow, working with the Lead Generation & AdTech team to build products from scratch, focusing on scalable architecture, performance, and reliability. Previously worked with Retention & Loyalty teams, building user engagement and lifecycle-driven products. Strong expertise in React.js, Vue.js, UI architecture, and cross-platform development, with deep experience in integrating third-party libraries, analytics, and marketing tools. Earlier at App Mastery, led the UI team to deliver high-performance, QA-stable Smart TV applications for the US and Canada markets. Hands-on experience across the full Smart TV ecosystem—from building apps from scratch to app submission, maintenance, and subscription models. Experienced in architectural upgrades, team leadership, and end-to-end ownership including release management. Passionate about building future-proof systems and seamless user experiences.`;
 
-      const container = document.getElementById('text');
-      const wrapper = document.getElementById('wrapper');
-      const progressBar = document.getElementById('progressBar');
+const container = document.getElementById('text');
+const wrapper = document.getElementById('wrapper');
+const progressBar = document.getElementById('progress');
+const hint = document.getElementById('hint');
 
-      const words = TEXT.split(' ');
-      const spans = [];
+const words = TEXT.split(' ');
+const spans = [];
 
-      words.forEach(word => {
-        const span = document.createElement('span');
-        span.className = 'word';
-        span.textContent = word + ' ';
-        spans.push(span);
-        container.appendChild(span);
-      });
+words.forEach(word => {
+  const span = document.createElement('span');
+  span.className = 'word';
+  span.textContent = word + ' ';
+  container.appendChild(span);
+  spans.push(span);
+});
 
-      let totalScroll = 1;
+let totalScroll = words.length * 25;
+wrapper.style.height = totalScroll + window.innerHeight + 'px';
 
-      function computeMetrics() {
-        const pxPerWord = 24;
-        totalScroll = spans.length * pxPerWord;
-        wrapper.style.height = totalScroll + window.innerHeight + 'px';
-      }
+function update() {
+  const rect = wrapper.getBoundingClientRect();
+  const progress = Math.min(Math.max((window.innerHeight - rect.top) / (window.innerHeight + wrapper.offsetHeight), 0), 1);
 
-      function render(progress) {
-        const n = spans.length;
+  const index = progress * spans.length;
 
-        const biased = Math.pow(progress, 1.6);
-        const x = biased * n;
+  spans.forEach((span, i) => {
+    span.style.opacity = i < index ? 1 : 0.2;
+  });
 
-        spans.forEach((span, i) => {
-          const d = x - i;
-          const clamped = Math.min(Math.max(d, 0), 1);
-          const e = Math.pow(clamped, 2.2);
+  progressBar.style.width = (progress * 100) + '%';
 
-          span.style.setProperty('--alpha', (0.05 + 0.95 * e).toFixed(3));
-          span.style.setProperty('--blur', `${(1 - e) * 12}px`);
-          span.style.setProperty('--y', `${(1 - e) * 14}px`);
-          span.style.setProperty('--opacity', (0.2 + 0.8 * e).toFixed(3));
-        });
+  const isAtEnd = window.scrollY + window.innerHeight >= document.documentElement.offsetHeight - 2;
+  hint.style.opacity = isAtEnd ? '0' : '1';
+  progressBar.style.opacity = isAtEnd ? '0' : '1';
+}
 
-        // update scroll indicator
-        progressBar.style.width = `${(progress * 100).toFixed(2)}%`;
-      }
+window.addEventListener('scroll', update);
+window.addEventListener('load', update);
+</script>
 
-      let ticking = false;
-
-      function update() {
-        const rect = wrapper.getBoundingClientRect();
-
-        const start = window.innerHeight;
-        const end = -wrapper.offsetHeight + window.innerHeight;
-
-        let progress = (start - rect.top) / (start - end);
-        progress = Math.min(Math.max(progress, 0), 1);
-
-        const hint = document.querySelector('.scroll-hint');
-        if (progress > 0.05 && hint) {
-          hint.style.opacity = '0';
-          hint.style.pointerEvents = 'none';
-        }
-
-        render(progress);
-        ticking = false;
-      }
-
-      function onScroll() {
-        if (!ticking) {
-          requestAnimationFrame(update);
-          ticking = true;
-        }
-      }
-
-      function init() {
-        computeMetrics();
-        update();
-      }
-
-      window.addEventListener('load', init);
-      window.addEventListener('resize', init);
-      window.addEventListener('scroll', onScroll, { passive: true });
-    })();
-  </script>
 </body>
 </html>
