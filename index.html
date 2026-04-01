@@ -30,6 +30,23 @@
       color: rgba(255,255,255,0.7);
     }
 
+    .scroll-hint {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.5);
+      animation: fadeMove 2s infinite;
+    }
+
+    @keyframes fadeMove {
+      0% { opacity: 0; transform: translate(-50%, 10px); }
+      50% { opacity: 1; transform: translate(-50%, 0px); }
+      100% { opacity: 0; transform: translate(-50%, -10px); }
+    }
+
     .scroll-wrapper {
       position: relative;
     }
@@ -60,6 +77,24 @@
       transition: all 0.25s ease-out;
       will-change: transform, filter, opacity;
     }
+
+    /* Scroll Indicator */
+    .scroll-indicator {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      z-index: 10;
+    }
+
+    .scroll-progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #fff, #aaa);
+      transition: width 0.1s linear;
+    }
   </style>
 </head>
 
@@ -68,6 +103,7 @@
     <div>
       <h1>Jayant Purohit</h1>
       <p>Crafting high-performance experiences that scale across platforms.</p>
+      <div class="scroll-hint">scroll to continue ↓</div>
     </div>
   </section>
 
@@ -77,12 +113,28 @@
     </div>
   </section>
 
+  <!-- Contact Section -->
+  <section style="padding: 60px 20px; text-align: center;">
+    <h2 style="font-size: 28px; margin-bottom: 20px;">Get in touch</h2>
+    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 16px; color: rgba(255,255,255,0.8);">
+      <a href="https://www.linkedin.com/in/jayant-purohit-715b0976" target="_blank" style="color: white; text-decoration: none;">LinkedIn</a>
+      <a href="mailto:dowebwithjay@gmail.com" style="color: white; text-decoration: none;">dowebwithjay@gmail.com</a>
+      <a href="tel:+919784483688" style="color: white; text-decoration: none;">+91-9784483688</a>
+    </div>
+  </section>
+
+  <!-- Scroll Indicator -->
+  <div class="scroll-indicator">
+    <div class="scroll-progress" id="progressBar"></div>
+  </div>
+
   <script>
     (function () {
       const TEXT = `Frontend Engineer with 7+ years of experience building scalable, high-performance applications across Web, iOS, and Smart TV platforms. Currently at BookMyShow, working with the Lead Generation & AdTech team to build products from scratch, focusing on scalable architecture, performance, and reliability. Previously worked with Retention & Loyalty teams, building user engagement and lifecycle-driven products. Strong expertise in React.js, Vue.js, UI architecture, and cross-platform development, with deep experience in integrating third-party libraries, analytics, and marketing tools.`;
 
       const container = document.getElementById('text');
       const wrapper = document.getElementById('wrapper');
+      const progressBar = document.getElementById('progressBar');
 
       const words = TEXT.split(' ');
       const spans = [];
@@ -106,7 +158,6 @@
       function render(progress) {
         const n = spans.length;
 
-        // ease-in bias
         const biased = Math.pow(progress, 1.6);
         const x = biased * n;
 
@@ -120,6 +171,9 @@
           span.style.setProperty('--y', `${(1 - e) * 14}px`);
           span.style.setProperty('--opacity', (0.2 + 0.8 * e).toFixed(3));
         });
+
+        // update scroll indicator
+        progressBar.style.width = `${(progress * 100).toFixed(2)}%`;
       }
 
       let ticking = false;
@@ -132,6 +186,12 @@
 
         let progress = (start - rect.top) / (start - end);
         progress = Math.min(Math.max(progress, 0), 1);
+
+        const hint = document.querySelector('.scroll-hint');
+        if (progress > 0.05 && hint) {
+          hint.style.opacity = '0';
+          hint.style.pointerEvents = 'none';
+        }
 
         render(progress);
         ticking = false;
